@@ -4,7 +4,7 @@ import ImageGalleryItem from '../ImageGalleryItems/ImageGalleryItem';
 import styles from './ImageGallery.module.css';
 
 function ImageGallery({ images, onImageClick }) {
-  console.log(images);
+  //console.log(images);
 
   return (
     <ul className={styles.gallery}>
