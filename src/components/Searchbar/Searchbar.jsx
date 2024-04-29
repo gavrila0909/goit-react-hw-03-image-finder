@@ -6,7 +6,7 @@ class Searchbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: '', 
+      inputValue: '',
     };
   }
 
@@ -16,7 +16,6 @@ class Searchbar extends Component {
     this.setState({ inputValue: event.target.value });
   };
 
-  
   handleSubmit = event => {
     event.preventDefault();
     this.props.onSubmit(this.state.inputValue);

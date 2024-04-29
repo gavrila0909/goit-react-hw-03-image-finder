@@ -6,7 +6,7 @@ import ImageGallery from '../ImageGallery/ImageGallery';
 import Modal from '../Modal/Modal';
 import Loader from '../Loader/Loader';
 import axios from 'axios';
-import styles from './App.module.css'
+import styles from './App.module.css';
 
 class App extends Component {
   constructor(props) {
@@ -17,11 +17,12 @@ class App extends Component {
       page: 1,
       showModal: false,
       selectedImage: null,
-      isLoading: false
+      isLoading: false,
+      error: null,
     };
   }
 
-  handleSubmit = (query) => {
+  handleSubmit = query => {
     this.setState({ query, images: [], page: 1 }, this.fetchImages);
   };
 
@@ -36,14 +37,17 @@ class App extends Component {
       const response = await axios.get(url);
       const data = response.data;
 
-      this.setState((prevState) => ({
+      this.setState(prevState => ({
         images: [...prevState.images, ...data.hits],
         page: prevState.page + 1,
-        isLoading: false
+        isLoading: false,
       }));
     } catch (error) {
       console.error('Error fetching images:', error);
-      this.setState({ isLoading: false });
+      this.setState({
+        isLoading: false,
+        error: 'Failed to fetch images. Please try again later.',
+      });
     }
   };
 
@@ -51,7 +55,7 @@ class App extends Component {
     this.fetchImages();
   };
 
-  handleImageClick = (image) => {
+  handleImageClick = image => {
     this.setState({ showModal: true, selectedImage: image });
   };
 
@@ -60,11 +64,12 @@ class App extends Component {
   };
 
   render() {
-    const { images, isLoading, showModal, selectedImage } = this.state;
+    const { images, isLoading, showModal, selectedImage, error } = this.state;
 
     return (
       <div className={styles.app}>
         <Searchbar onSubmit={this.handleSubmit} />
+        {error && <p className={styles.error}>{error}</p>}
         <ImageGallery images={images} onImageClick={this.handleImageClick} />
         {isLoading && <Loader />}
         {!!images.length && <Button onLoadMore={this.handleLoadMore} />}
